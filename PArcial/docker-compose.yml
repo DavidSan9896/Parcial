@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j_db
+    restart: always
+    environment:
+      - NEO4J_AUTH=neo4j/123456789
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  etl_service:
+    build: ./backend
+    container_name: etl_service
+    depends_on:
+      - neo4j
+      - postgres
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/output:/app/output
+    networks:
+      - etl_network
+
+volumes:
+  neo4j_data:
+  postgres_data:
+
+networks:
+  etl_network:
+    driver: bridge

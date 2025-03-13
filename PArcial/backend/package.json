@@ -1,0 +1,16 @@
+{
+  "name": "etl-service",
+  "version": "1.0.0",
+  "description": "ETL process with Neo4j, PostgreSQL, and CSV export",
+  "main": "etl.js",
+  "scripts": {
+    "start": "node etl.js"
+  },
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.21.2",
+    "neo4j-driver": "^5.28.1",
+    "pg": "^8.7.1"
+  }
+}
